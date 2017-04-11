@@ -1,0 +1,22 @@
+{% extends 'bootstrap.html' %}
+
+{% load bootstrap3 %}
+
+{% block bootstrap3_content %}
+    <div class="container">
+        <div class="header clearfix">
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'account_profile' %}">Profile</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <h3>Wiki Sensei</h3>
+        </div>
+        {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+        {% block content %}(no content){% endblock %}
+    </div>
+
+{% endblock %}

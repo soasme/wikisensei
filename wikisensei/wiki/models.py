@@ -13,10 +13,15 @@ class Privacy(object):
 class Wiki(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
+    slug = models.CharField(max_length=30)
     version = models.IntegerField(default=0)
     privacy = models.IntegerField(default=Privacy.PUBLIC)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    # FIXME: user+slug as unique
+
+    def __unicode__(self):
+        return u'%s/%s' % (self.user.username, self.slug)
 
 
 class Version(models.Model):
@@ -27,3 +32,6 @@ class Version(models.Model):
 
     class Meta:
         ordering = ['-version']
+
+    def __unicode__(self):
+        return u'%d!%s...' % (self.version, self.content[:10])

@@ -1,0 +1,52 @@
+{
+    "app_label": "wiki",
+    "instances": [
+        {
+            "model_name": "Wiki",
+            "data": {
+                "slug": "hello-world",
+                "title": "Hello World",
+                "version": 2
+            },
+            "refs": {
+                "user": {
+                    "app_label": "auth",
+                    "model_name": "User",
+                    "data": {
+                        "username": "admin"
+                    }
+                }
+            }
+        },
+        {
+            "model_name": "version",
+            "data": {
+                "version": 1,
+                "content": "This is content, version 1."
+            },
+            "refs": {
+                "wiki": {
+                    "model_name": "Wiki",
+                    "data": {
+                        "slug": "hello-world"
+                    }
+                }
+            }
+        },
+        {
+            "model_name": "version",
+            "data": {
+                "version": 2,
+                "content": "This is content, version 2."
+            },
+            "refs": {
+                "wiki": {
+                    "model_name": "Wiki",
+                    "data": {
+                        "slug": "hello-world"
+                    }
+                }
+            }
+        }
+    ]
+}

@@ -1,2 +1,7 @@
 django
 django-allauth
+django-bootstrap3
+django_extensions
+djangorestframework
+django-filter
+django-cors-headers

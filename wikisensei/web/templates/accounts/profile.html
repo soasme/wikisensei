@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% load account %}
+
+{% block content %}
+  <div class="container">
+    user: {% user_display user %}
+    <a href="{% url 'account_logout' %}">Logout</a>
+  </div>
+{% endblock %}

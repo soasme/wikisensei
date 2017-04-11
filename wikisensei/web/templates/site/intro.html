@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+{% block content %}
+  <ul>
+  {% if user.is_authenticated %}
+    <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
+    <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+  {% else %}
+    <li><a href="{% url 'account_login' %}">Sign In</a></li>
+    <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+  {% endif %}
+  </ul>
+{% endblock %}

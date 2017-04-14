@@ -18,9 +18,10 @@ class WikiTestCase(TestCase):
         self.assertEqual(self.wiki.version, 1)
         self.assertEqual(self.wiki.title, 'Title')
         self.assertEqual(services.get_wiki_content(self.wiki).content, 'Content')
+        self.assertEqual(services.mget_pk_by_titles({'Title', }), {'Title': self.wiki.pk})
 
     def test_update_wiki(self):
-        services.update_wiki(self.wiki, 'New Content')
+        services.update_wiki(self.wiki, 'title', 'New Content')
         self.assertEqual(self.wiki.version, 2)
         self.assertEqual(services.get_wiki_content(self.wiki).content, 'New Content')
 
@@ -32,3 +33,7 @@ class WikiTestCase(TestCase):
         services.make_wiki_public(self.wiki)
         self.assertTrue(services.is_public(self.wiki))
         self.assertFalse(services.is_private(self.wiki))
+
+    def test_extract_wiki_titles(self):
+        self.assertEqual(services.extract_wiki_titles('[hello] [world]'), ['hello', 'world'])
+        self.assertEqual(services.extract_wiki_titles('[hello](http://example.org) [world]'), ['world'])

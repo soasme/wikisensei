@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 from django.urls import reverse
 
 from .models import Wiki, Version, Privacy
+from .markdown import markdown
 
 def add_wiki(user, title, content):
     wiki = Wiki(user=user, title=title, version=1)
@@ -43,13 +44,7 @@ def get_wiki_content(wiki):
     return content
 
 def render_wiki_html(content):
-    titles = extract_wiki_titles(content)
-    pks = mget_pk_by_titles(titles)
-    links = '\n'.join([
-        '[%s]: %s' % (title, reverse('wiki_show', kwargs=dict(pk=pk)))
-        for title, pk in pks.items()
-    ])
-    html = mistune.markdown(content + '\n' + links)
+    html = markdown(content)
     html = html.replace('\n', '<br>')
     return html
 
@@ -72,14 +67,24 @@ def get_root_wiki(user):
     assert bool(wiki), 'User should have root wiki.'
     return wiki
 
+def get_next_wiki(wiki, title):
+    try:
+        return Wiki.objects.get(user=wiki.user, title=title)
+    except Wiki.DoesNotExist:
+        pass
+
 def mget_pk_by_titles(titles):
     wikis = Wiki.objects.filter(title__in=list(titles))
     return {wiki.title: wiki.pk for wiki in wikis}
 
 def extract_wiki_titles(content):
-    # '[^!]?' => It should not start with ! => It's not an image link
-    # \[ => It should start with [
-    # ([^]]?) => It should match title as group.
-    # \] => It should follow by ]
-    # (?!\([^)]*\)) => It should not follow (LINK) => It's not an external link.
-    return re.findall(r'[^!]?\[([^]]+?)\](?!\([^)]*\))', content)
+    return re.findall(r'\[\[([\s\S]+?\|?[\s\S]+?)\]\](?!\])', content)
+
+def create_wikis_from_wiki(wiki):
+    titles = extract_wiki_titles(get_wiki_content(wiki).content)
+    pks = mget_pk_by_titles(titles)
+    nowiki_titles = set(titles) - set(pks.keys())
+    return [
+        add_wiki(wiki.user, title, 'To be continued.')
+        for title in nowiki_titles
+    ]

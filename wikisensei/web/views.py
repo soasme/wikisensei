@@ -15,6 +15,7 @@ from wikisensei.wiki.models import Wiki
 from wikisensei.wiki.serializers import WikiSerializer
 from wikisensei.wiki.services import get_root_wiki
 from wikisensei.wiki.services import is_private
+from wikisensei.wiki.services import get_next_wiki
 
 def index(request):
     if request.user.is_authenticated:
@@ -35,6 +36,13 @@ class WikiDetail(APIView):
 
     def get(self, request, pk):
         wiki = get_object_or_404(Wiki, pk=pk)
+
+        # handle next
+        next_title = request.GET.get('next')
+        if next_title:
+            wiki = get_next_wiki(wiki, next_title)
+            return redirect('wiki_show', pk=wiki.pk)
+
         # private wiki can only be seen by author.
         if is_private(wiki) and wiki.user != request.user:
             raise PermissionDenied
@@ -112,7 +120,10 @@ class WikiUpdate(APIView):
         return redirect('wiki_show', pk=serializer.data.get('id'))
 
 class WikiRoot(APIView):
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         wiki = get_root_wiki(request.user)
         return redirect('wiki_show', pk=wiki.pk)
+

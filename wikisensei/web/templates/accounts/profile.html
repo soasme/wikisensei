@@ -10,8 +10,7 @@
         user: {% user_display user %}
         <a href="{% url 'account_logout' %}">Logout</a>
       </li>
-      <li><a href="{% url 'wiki_create' %}">Create Wiki</a></li>
-      <li><a href="{% url 'wiki_root' %}">My Wiki</a></li>
+      <li><a href="{% url 'wiki_root' %}">Root Wiki</a></li>
       <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
       <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
     {% else %}

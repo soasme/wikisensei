@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load rest_framework %}
+
+{% block content %}
+  <form action="{% url 'wiki_update' pk=serializer.data.id %}" method="POST">
+    {% csrf_token %}
+    {% render_form serializer %}
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}
+

@@ -13,7 +13,7 @@
                     {% endif %}
                 </ul>
             </nav>
-            <h3>Wiki Sensei</h3>
+            <h1><a href="{% url 'home' %}">Wiki Sensei</a></h1>
         </div>
         {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
         {% block content %}(no content){% endblock %}

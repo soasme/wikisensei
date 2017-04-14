@@ -1,17 +1,12 @@
 {% extends 'base.html' %}
+{% load rest_framework %}
 
-{# Load the tag library #}
-{% load bootstrap3 %}
-
-{# Load CSS and JavaScript #}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-
-{# Display django.contrib.messages as Bootstrap alerts #}
-{% bootstrap_messages %}
-
-{% block bootstrap3_content %}
+{% block content %}
   <div class="container">
-    {{ content | safe }}
+    <h1>{{ wiki.title }}</h1>
+    <div>
+      <a href="{% url 'wiki_update' pk=wiki.pk %}">Update</a>
+    </div>
+    <div>{{ serializer.data.html | safe }}</div>
   </div>
 {% endblock %}

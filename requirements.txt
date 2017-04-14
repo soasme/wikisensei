@@ -5,3 +5,7 @@ django_extensions
 djangorestframework
 django-filter
 django-cors-headers
+mistune
+
+# test
+selenium

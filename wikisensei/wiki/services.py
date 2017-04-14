@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from slugify import slugify
 from django.db.models import F
 from django.core.paginator import Paginator
 
 from .models import Wiki, Version, Privacy
 
 def add_wiki(user, title, content):
-    slug = slugify(title)
-    # FIXME: if dup slug detected, please attach sequence num.
-    wiki = Wiki(user=user, title=title, slug=slug version=1)
+    wiki = Wiki(user=user, title=title, version=1)
     wiki.save()
     content = Version(wiki=wiki, version=1, content=content)
     content.save()
@@ -45,3 +42,8 @@ def is_public(wiki):
 
 def is_private(wiki):
     return wiki.privacy == Privacy.PRIVATE
+
+def get_root_wiki(user):
+    wiki = Wiki.objects.filter(user=user).order_by('created_at').first()
+    assert bool(wiki), 'User should have root wiki.'
+    return wiki

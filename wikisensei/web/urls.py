@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^wiki/(?P<pk>\d+)/update', views.WikiUpdate.as_view(), name='wiki_update'),
     url(r'^wiki/(?P<pk>\d+)/', views.WikiDetail.as_view(), name='wiki_show'),
     url(r'^wiki/create/$', views.WikiCreate.as_view(), name='wiki_create'),
+    url(r'^wiki/list/$', views.WikiList.as_view(), name='wiki_list'),
 ]

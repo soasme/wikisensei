@@ -139,3 +139,16 @@ class WikiRoot(APIView):
         wiki = get_root_wiki(request.user)
         return redirect('wiki_show', pk=wiki.pk)
 
+
+class WikiList(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'wiki/list.html'
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        wikis = Wiki.objects.filter(user=request.user)
+        serializer = WikiSerializer(wikis, many=True)
+        return Response({
+            'serializer': serializer,
+        })

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <ul>
+  {% for wiki in serializer.data %}
+    <li>
+      <a href="{% url 'wiki_show' pk=wiki.id %}">{{ wiki.title }}</a>
+      <small class="text-muted">updated at {{ wiki.updated_at }}</small>
+    </li>
+  {% endfor %}
+  </ul>
+{% endblock %}

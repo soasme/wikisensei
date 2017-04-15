@@ -6,7 +6,9 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.http import Http404
 from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.settings import api_settings
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -41,6 +43,8 @@ class WikiDetail(APIView):
         next_title = request.GET.get('next')
         if next_title:
             wiki = get_next_wiki(wiki, next_title)
+            if not wiki:
+                raise Http404
             return redirect('wiki_show', pk=wiki.pk)
 
         # private wiki can only be seen by author.
@@ -93,6 +97,7 @@ class WikiUpdate(APIView):
             raise PermissionDenied
         serializer = WikiSerializer(wiki)
         return Response({
+            'wiki': wiki,
             'serializer': serializer
         })
 
@@ -111,7 +116,14 @@ class WikiUpdate(APIView):
 
         # validate
         if not serializer.is_valid():
+            # move unique together message to title
+            serializer._errors.setdefault('title', [])
+            serializer._errors['title'].extend(
+                serializer.errors.get(api_settings.NON_FIELD_ERRORS_KEY, [])
+            )
+            del serializer._errors[api_settings.NON_FIELD_ERRORS_KEY]
             return Response({
+                'wiki': wiki,
                 'serializer': serializer,
             })
 

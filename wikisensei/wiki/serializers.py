@@ -2,6 +2,7 @@
 
 import mistune
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from .models import Wiki
 from .services import get_wiki_content
@@ -11,10 +12,20 @@ from .services import render_wiki_html
 from .services import create_wikis_from_wiki
 
 class WikiSerializer(serializers.Serializer):
+
     title = serializers.CharField(max_length=30)
     content = serializers.CharField(
         style={'base_template': 'textarea.html', 'rows': 20},
     )
+
+    class Meta:
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Wiki.objects.all(),
+                fields=('user', 'title'),
+                message=u'You have already had another wiki with same title.',
+            )
+        ]
 
     def validate_title(self, value):
         if not value:

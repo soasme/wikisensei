@@ -35,4 +35,4 @@ class WikiTestCase(TestCase):
         self.assertFalse(services.is_private(self.wiki))
 
     def test_extract_wiki_titles(self):
-        self.assertEqual(services.extract_wiki_titles('[[hello]] [[world]]'), ['hello', 'world'])
+        self.assertEqual(services.extract_wiki_titles('[[hello]] [[world]]'), {'hello', 'world'})

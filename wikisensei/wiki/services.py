@@ -9,7 +9,7 @@ from django.core.paginator import Paginator
 from django.urls import reverse
 
 from .models import Wiki, Version, Privacy
-from .markdown import markdown
+from .markdown import Parser
 
 def add_wiki(user, title, content):
     wiki = Wiki(user=user, title=title, version=1)
@@ -44,7 +44,8 @@ def get_wiki_content(wiki):
     return content
 
 def render_wiki_html(content):
-    html = markdown(content)
+    parser = Parser()
+    html = parser(content)
     html = html.replace('\n', '<br>')
     return html
 
@@ -78,7 +79,9 @@ def mget_pk_by_titles(titles):
     return {wiki.title: wiki.pk for wiki in wikis}
 
 def extract_wiki_titles(content):
-    return re.findall(r'\[\[([\s\S]+?\|?[\s\S]+?)\]\](?!\])', content)
+    parser = Parser()
+    parser(content)
+    return parser.inline.wiki_links
 
 def create_wikis_from_wiki(wiki):
     titles = extract_wiki_titles(get_wiki_content(wiki).content)

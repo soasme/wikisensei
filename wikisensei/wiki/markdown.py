@@ -8,6 +8,7 @@ class WikiLinkRenderer(Renderer):
     def wiki_link(self, alt, link):
         return '<a href="?next=%s">%s</a>' % (link, alt)
 
+
 class WikiLinkInlineLexer(InlineLexer):
     def enable_wiki_link(self):
         # add wiki_link rules
@@ -26,15 +27,23 @@ class WikiLinkInlineLexer(InlineLexer):
         text = m.group(1)
         splits = text.split('|')
         if len(splits) == 1:
-            alt, link = text, text
-            return self.renderer.wiki_link(alt, link)
+            alt, title = text, text
         else:
-            alt, link = splits[0], splits[1]
-        # you can create an custom render
-        # you can also return the html if you like
-        return self.renderer.wiki_link(alt, link)
+            alt, title = splits[0], splits[1]
+        if not hasattr(self, '_wiki_links'):
+            self._wiki_links = set()
+        self._wiki_links.add(title)
+        return self.renderer.wiki_link(alt, title)
+
+    @property
+    def wiki_links(self):
+        if not hasattr(self, '_wiki_links'):
+            self._wiki_links = set()
+        return self._wiki_links
 
 renderer = WikiLinkRenderer()
 inline = WikiLinkInlineLexer(renderer)
 inline.enable_wiki_link()
-markdown = Markdown(renderer, inline=inline)
+
+def Parser():
+    return Markdown(renderer, inline=inline)

@@ -2,9 +2,9 @@
 {% load rest_framework %}
 
 {% block content %}
-  <form action="{% url 'wiki_update' pk=serializer.data.id %}" method="POST">
+  <form action="{% url 'wiki_update' pk=wiki.pk %}" method="POST">
     {% csrf_token %}
-    {% render_form serializer %}
+    {% render_form serializer template_pack='rest_framework/vertical' %}
     <input type="submit" value="Save">
   </form>
 {% endblock %}

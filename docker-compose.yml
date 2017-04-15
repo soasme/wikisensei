@@ -1,0 +1,31 @@
+version: '2'
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 'mysql'
+      MYSQL_DATABASE: 'wikisensei'
+      MYSQL_USER: 'wikisensei'
+      MYSQL_PASSWORD: 'nosecret'
+  cache:
+    image: memcached
+  mq:
+    image: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: 'wikisensei'
+      RABBITMQ_DEFAULT_PASS: 'nosecret'
+      RABBITMQ_DEFAULT_VHOST: 'wikisensei'
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - cache
+      - mq
+volumes:
+  schemas:
+    external: false

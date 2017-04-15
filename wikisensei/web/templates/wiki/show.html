@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 {% load rest_framework %}
+{% load cache %}
 
 {% block content %}
+  {% cache 86400 wiki wiki.pk wiki.version %}
   <div class="container">
     <h1>{{ wiki.title }}</h1>
+    <p><span class="text-muted">latest updated: {{ wiki.updated_at }}</span></p>
     <div>
       <a href="{% url 'wiki_update' pk=wiki.pk %}">Update</a>
     </div>
     <div>{{ serializer.data.html | safe }}</div>
   </div>
+  {% endcache %}
 {% endblock %}

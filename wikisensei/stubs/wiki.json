@@ -4,7 +4,7 @@
         {
             "model_name": "Wiki",
             "data": {
-                "title": "Hello World",
+                "title": "Home",
                 "version": 2
             },
             "refs": {
@@ -27,7 +27,7 @@
                 "wiki": {
                     "model_name": "Wiki",
                     "data": {
-                        "title": "Hello World"
+                        "title": "Home"
                     }
                 }
             }
@@ -42,7 +42,7 @@
                 "wiki": {
                     "model_name": "Wiki",
                     "data": {
-                        "title": "Hello World"
+                        "title": "Home"
                     }
                 }
             }

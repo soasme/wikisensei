@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
+
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.settings import api_settings
 from rest_framework.response import Response

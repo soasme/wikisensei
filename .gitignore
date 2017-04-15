@@ -113,3 +113,5 @@ db.sqlite3
 
 media/
 app/static/admin
+
+deploy/

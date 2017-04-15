@@ -6,6 +6,5 @@ djangorestframework
 django-filter
 django-cors-headers
 mistune
-
-# test
-selenium
+MySQL-python
+python-memcached

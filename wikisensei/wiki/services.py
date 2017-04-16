@@ -46,7 +46,6 @@ def get_wiki_content(wiki):
 def render_wiki_html(content):
     parser = Parser()
     html = parser(content)
-    html = html.replace('\n', '<br>')
     return html
 
 def make_wiki_public(wiki):

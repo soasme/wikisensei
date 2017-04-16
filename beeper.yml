@@ -4,6 +4,7 @@ manifest:
     - manage.py
     - wikisensei
 scripts:
+    - rm -r ./wikisensei/static
     - venv/bin/python manage.py collectstatic --noinput
 postinstall:
     - venv/bin/python manage.py migrate

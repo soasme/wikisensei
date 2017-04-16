@@ -1,0 +1,10 @@
+application: wikisensei
+manifest:
+    - requirements.txt
+    - manage.py
+    - wikisensei
+scripts:
+    - venv/bin/python manage.py collectstatic --noinput
+postinstall:
+    - echo "Done."
+

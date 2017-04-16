@@ -6,6 +6,6 @@ djangorestframework
 django-filter
 django-cors-headers
 mistune
-MySQL-python
+PyMySQL
 python-memcached
 gunicorn

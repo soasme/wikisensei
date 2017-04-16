@@ -4,8 +4,8 @@
 {% load humanize %}
 
 {% block content %}
-  {% cache 86400 wiki wiki.pk wiki.version %}
   <div class="container">
+    {% cache 86400 wiki wiki.pk wiki.version %}
     <h1>{{ wiki.title }}</h1>
     <div class="row">
       <div class="col-md-8">
@@ -16,12 +16,23 @@
         </div>
       </div>
       <div class="col-md-4">
-        <div class="pull-right">
-          <a class="btn btn-default" href="{% url 'wiki_update' pk=wiki.pk %}">Update</a>
+        <div class="pull-right wiki-ops">
         </div>
       </div>
     </div>
     <div>{{ serializer.data.html | safe }}</div>
+    {% endcache %}
   </div>
-  {% endcache %}
+
+{% endblock %}
+
+{% block script %}
+  <script>
+    {% if wiki.user == user %}
+    $(function(){
+      var html = '<a class="btn btn-default" href="{% url 'wiki_update' pk=wiki.pk %}">Update</a>';
+      $(".wiki-ops").html(html);
+    })
+    {% endif %}
+  </script>
 {% endblock %}

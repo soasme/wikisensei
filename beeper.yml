@@ -6,5 +6,6 @@ manifest:
 scripts:
     - venv/bin/python manage.py collectstatic --noinput
 postinstall:
+    - venv/bin/python manage.py migrate
     - echo "Done."
 

@@ -65,8 +65,14 @@ def is_private(wiki):
 
 def get_root_wiki(user):
     wiki = Wiki.objects.filter(user=user).order_by('created_at').first()
-    assert bool(wiki), 'User should have root wiki.'
+    if not wiki:
+        wiki = create_root_wiki(user)
     return wiki
+
+def create_root_wiki(user):
+    # FIXME: provide default content
+    content = 'Hello World'
+    add_wiki(user, 'Home', content)
 
 def get_next_wiki(wiki, title):
     try:

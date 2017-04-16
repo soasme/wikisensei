@@ -4,23 +4,22 @@
 {% load static %}
 
 {% block bootstrap3_content %}
-    <div class="container">
-        <div class="header clearfix">
-            <nav>
-                <ul class="nav nav-pills pull-left">
-                  <li>
-                    <a href="{% url 'home' %}" style="margin-top: 10px;">
-                      <img src="{% static 'web/images/logo.png' %}">
-                    </a>
-                  </li>
-                  {% if user.is_authenticated %}
-                  <li><a style="margin-top: 10px; margin-bottom: 10px;" href="{% url 'wiki_root' %}">Home</a></li>
-                  {% endif %}
-                </ul>
-            </nav>
-        </div>
-        {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
-        {% block content %}(no content){% endblock %}
-    </div>
-
+  <div class="container">
+      <div class="header clearfix">
+          <nav>
+              <ul class="nav nav-pills pull-left">
+                <li>
+                  <a href="{% url 'home' %}" style="margin-top: 10px;">
+                    <img src="{% static 'web/images/logo.png' %}">
+                  </a>
+                </li>
+                {% if user.is_authenticated %}
+                <li><a style="margin-top: 10px; margin-bottom: 10px;" href="{% url 'wiki_root' %}">Home</a></li>
+                {% endif %}
+              </ul>
+          </nav>
+      </div>
+      {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+      {% block content %}(no content){% endblock %}
+  </div>
 {% endblock %}

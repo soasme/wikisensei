@@ -1,3 +1,20 @@
 body {
   padding-top: 70px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
+
+#wiki-update-form textarea[name="content"], #wiki-update-form input[name="title"] {
+  line-height: 22px;
+}
+
+#wiki-update-form textarea[name="content"] {
+  height: 390px;
+  margin: 13px 0 5px;
+  line-height: 22px;
+  resize: vertical;
 }

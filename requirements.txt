@@ -8,4 +8,5 @@ django-cors-headers
 mistune
 PyMySQL
 python-memcached
+whitenoise
 gunicorn

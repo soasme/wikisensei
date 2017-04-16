@@ -1,4 +1,5 @@
 {% extends 'bootstrap.html' %}
+{% load static %}
 
 {% block bootstrap3_content %}
   {% include "nav.html" %}
@@ -8,5 +9,5 @@
 {% endblock %}
 
 {% block bootstrap3_extra_script %}
-  <script src="/static/js/main.js"></script>
+  <script src="{% static 'js/main.js' %}"></script>
 {% endblock %}

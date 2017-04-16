@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.humanize',
+    'anymail',
     'bootstrap3',
     'wikisensei.wiki',
     'wikisensei.web',
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
+SITE_USERNAME = 'admin'
 
 MIDDLEWARE = [
     #'django.middleware.security.SecurityMiddleware',

@@ -9,4 +9,5 @@ mistune
 PyMySQL
 python-memcached
 whitenoise
+django-anymail[mailgun]
 gunicorn

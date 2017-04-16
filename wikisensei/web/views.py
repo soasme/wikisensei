@@ -26,6 +26,12 @@ def index(request):
     else:
         return redirect('account_login')
 
+def price(request):
+    return render(request, 'site/price.html')
+
+def help(request):
+    return render(request, 'site/help.html')
+
 @login_required
 def profile(request):
     return render(request, 'accounts/profile.html', {

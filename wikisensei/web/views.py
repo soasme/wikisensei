@@ -19,6 +19,8 @@ from wikisensei.wiki.serializers import WikiSerializer
 from wikisensei.wiki.services import get_root_wiki
 from wikisensei.wiki.services import is_private
 from wikisensei.wiki.services import get_next_wiki
+from wikisensei.wiki.services import is_root_wiki
+from wikisensei.wiki.services import validate_root_wiki_title
 
 def index(request):
     if request.user.is_authenticated:
@@ -43,21 +45,40 @@ class WikiDetail(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'wiki/show.html'
 
+    def route_next(self, request, wiki):
+        next_title = request.GET.get('next')
+
+        # case: do nothing if no next.
+        if not next_title:
+            return
+
+        # case: Raise 404 if no title matched.
+        # This might be caused by user removing a wiki.
+        wiki = get_next_wiki(wiki, next_title)
+        if not wiki:
+            raise Http404
+
+        # case: Redirect to root if it's root wiki.
+        if is_root_wiki(wiki):
+            return redirect('wiki_root')
+
+        # case: Redirect to wiki.
+        return redirect('wiki_show', pk=wiki.pk)
+
     def get(self, request, pk):
         wiki = get_object_or_404(Wiki, pk=pk)
 
         # handle next
-        next_title = request.GET.get('next')
-        if next_title:
-            wiki = get_next_wiki(wiki, next_title)
-            if not wiki:
-                raise Http404
-            return redirect('wiki_show', pk=wiki.pk)
+        res = self.route_next(request, wiki)
+        if res:
+            return res
 
         # private wiki can only be seen by author.
         if is_private(wiki) and wiki.user != request.user:
             raise PermissionDenied
+
         serializer = WikiSerializer(wiki)
+
         return Response({
             'serializer': serializer,
             'wiki': wiki,
@@ -138,13 +159,11 @@ class WikiUpdate(APIView):
         serializer.save(user=request.user)
         return redirect('wiki_show', pk=serializer.data.get('id'))
 
-class WikiRoot(APIView):
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (IsAuthenticated,)
+class WikiRoot(WikiDetail):
 
     def get(self, request):
         wiki = get_root_wiki(request.user)
-        return redirect('wiki_show', pk=wiki.pk)
+        return super(WikiRoot, self).get(request, wiki.pk)
 
 
 class WikiList(APIView):

@@ -11,6 +11,8 @@ from django.urls import reverse
 from .models import Wiki, Version, Privacy
 from .markdown import Parser
 
+ROOT_WIKI_TITLE = 'Home'
+
 def add_wiki(user, title, content):
     wiki = Wiki(user=user, title=title, version=1)
     wiki.save()
@@ -21,6 +23,9 @@ def add_wiki(user, title, content):
 def update_wiki(wiki, title, content):
     latest_version = wiki.versions.first()
     assert latest_version, 'Wiki has at least one version.'
+
+    if is_root_wiki(wiki) and title != ROOT_WIKI_TITLE:
+        raise Exception('Root wiki cannot change title.')
 
     next_version_num = latest_version.version
 
@@ -62,6 +67,12 @@ def is_public(wiki):
 def is_private(wiki):
     return wiki.privacy == Privacy.PRIVATE
 
+def is_root_wiki(wiki):
+    return wiki.title == ROOT_WIKI_TITLE
+
+def validate_root_wiki_title(wiki, title):
+    return is_root_wiki(wiki) and title == ROOT_WIKI_TITLE
+
 def get_root_wiki(user):
     wiki = Wiki.objects.filter(user=user).order_by('created_at').first()
     if not wiki:
@@ -70,8 +81,8 @@ def get_root_wiki(user):
 
 def create_root_wiki(user):
     # FIXME: provide default content
-    content = 'Hello World'
-    add_wiki(user, 'Home', content)
+    content = 'Kia ora!'
+    add_wiki(user, ROOT_WIKI_TITLE, content)
 
 def get_next_wiki(wiki, title):
     try:

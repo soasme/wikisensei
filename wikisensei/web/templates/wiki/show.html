@@ -1,14 +1,25 @@
 {% extends 'base.html' %}
 {% load rest_framework %}
 {% load cache %}
+{% load humanize %}
 
 {% block content %}
   {% cache 86400 wiki wiki.pk wiki.version %}
   <div class="container">
     <h1>{{ wiki.title }}</h1>
-    <p><span class="text-muted">latest updated: {{ wiki.updated_at }}</span></p>
-    <div>
-      <a href="{% url 'wiki_update' pk=wiki.pk %}">Update</a>
+    <div class="row">
+      <div class="col-md-8">
+        <div class="vcenter">
+          <span class="text-muted">Updated at {{ wiki.updated_at | naturaltime }}</span>
+          <span>·</span>
+          <span class="text-muted">{{ wiki.version }} revisions.</span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="pull-right">
+          <a class="btn btn-default" href="{% url 'wiki_update' pk=wiki.pk %}">Update</a>
+        </div>
+      </div>
     </div>
     <div>{{ serializer.data.html | safe }}</div>
   </div>

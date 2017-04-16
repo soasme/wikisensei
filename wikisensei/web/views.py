@@ -4,7 +4,9 @@ from __future__ import unicode_literals
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
 
@@ -21,6 +23,7 @@ from wikisensei.wiki.services import is_private
 from wikisensei.wiki.services import get_next_wiki
 from wikisensei.wiki.services import is_root_wiki
 from wikisensei.wiki.services import validate_root_wiki_title
+from wikisensei.wiki.services import ROOT_WIKI_TITLE
 
 def index(request):
     if request.user.is_authenticated:
@@ -178,3 +181,20 @@ class WikiList(APIView):
         return Response({
             'serializer': serializer,
         })
+
+class WikiPage(WikiDetail):
+    page_title = ROOT_WIKI_TITLE
+
+    def get(self, request):
+        user = get_object_or_404(User, username=settings.SITE_USERNAME)
+        wiki = get_object_or_404(Wiki, user=user, title=self.__class__.page_title)
+        return super(WikiPage, self).get(request, wiki.pk)
+
+class Home(WikiPage):
+    page_title = 'Home'
+
+class Price(WikiPage):
+    page_title = 'Price'
+
+class Help(WikiPage):
+    page_title = 'Help'

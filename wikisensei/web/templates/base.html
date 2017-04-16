@@ -1,6 +1,7 @@
 {% extends 'bootstrap.html' %}
 
 {% load bootstrap3 %}
+{% load static %}
 
 {% block bootstrap3_content %}
     <div class="container">
@@ -8,12 +9,12 @@
             <nav>
                 <ul class="nav nav-pills pull-left">
                   <li>
-                    <a href="{% url 'home' %}">
-                      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACYElEQVR4Xu2Y0XLDIAwEnf//6HaaiWcSBnnvRMF2oG+pBYLVSQge2+R/j8n3vy0ASwHXIfDzWspQVQ51BqwvB8BdkGtf8lDHq3aSto8U4Dpy7b8WwL6xEi4Bav2eAtpDAdMC2DdOkYxyMxqXnW94DVgAXgSyESvHZeeRIh/l6fvg7AL+a1x2nu4AaGHZXN7HlRvINmu0zqefzClAEy8AQU+vglPSU5E5+bu8ArLSt06jHikQLaDM8ahTjKLrAjlNAQsA9ANukSTluJ3lh/3IFKDcJDBuceyeAnTpoe/Z26IKYgEIjuN0CkS56HZwJHWq9lJkt22T7JwaMC0AtTdXq3WrApQuULZRFDAtAJninQ2p4Nx5b9La7wBAqubSbitGC0CW3MBxrQo4HD+DApoBtEYgKxa1r8jOjy9CdHtrciwMPh2AugD3LiDs/WkyRHlOJxjZfj0AdeO7XRm56De9F6jf6X0gXQRJgnQ7JCDqBtXHUwpU9Xvtn27u08uOCkotuqSwssbYClgAlKekSpVWUyZKDVKAqySaL+wDaCPRxDROlS49mJS1w/X7kSKZGpA99lwAtFE3VatFdwE4aMso5+j8pWqsSpc6R/VCV/WX6QRV6d0eQLbYRRFzO8LSv6s4CkD6NkjSnQaA28rS8aa2vK7fw35AKSCudKl4UuscSb9UFgGT/GSKYOsCFeh/PkgxUapZl6IFQOgD1IjRee1+zxZby4+igOkADCF/FeUd3QW+OvK1szTb4lo5J0S+teOz1vMe5ekBWOQ6GJ9Se87K8xq/6QF0EBVPeSUF8Go7WPwC754SUEn6nUkAAAAASUVORK5CYII=">
+                    <a href="{% url 'home' %}" style="margin-top: 10px;">
+                      <img src="{% static 'web/images/logo.png' %}">
                     </a>
                   </li>
                   {% if user.is_authenticated %}
-                  <li><a style="margin-top: 20px;" href="{% url 'wiki_root' %}">Home</a></li>
+                  <li><a style="margin-top: 10px; margin-bottom: 10px;" href="{% url 'wiki_root' %}">Home</a></li>
                   {% endif %}
                 </ul>
             </nav>

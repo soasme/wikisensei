@@ -82,7 +82,7 @@ def get_root_wiki(user):
 def create_root_wiki(user):
     # FIXME: provide default content
     content = 'Kia ora!'
-    add_wiki(user, ROOT_WIKI_TITLE, content)
+    return add_wiki(user, ROOT_WIKI_TITLE, content)
 
 def get_next_wiki(wiki, title):
     try:

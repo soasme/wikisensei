@@ -163,6 +163,8 @@ class WikiUpdate(APIView):
         return redirect('wiki_show', pk=serializer.data.get('id'))
 
 class WikiRoot(WikiDetail):
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         wiki = get_root_wiki(request.user)

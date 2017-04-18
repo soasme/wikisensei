@@ -12,7 +12,7 @@ class Privacy(object):
 
 class Wiki(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    title = models.CharField(max_length=30)
+    title = models.CharField(max_length=255)
     version = models.IntegerField(default=0)
     privacy = models.IntegerField(default=Privacy.PUBLIC)
     created_at = models.DateTimeField(auto_now_add=True)

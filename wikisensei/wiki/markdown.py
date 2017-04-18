@@ -41,9 +41,8 @@ class WikiLinkInlineLexer(InlineLexer):
             self._wiki_links = set()
         return self._wiki_links
 
-renderer = WikiLinkRenderer()
-inline = WikiLinkInlineLexer(renderer)
-inline.enable_wiki_link()
-
 def Parser():
+    renderer = WikiLinkRenderer()
+    inline = WikiLinkInlineLexer(renderer)
+    inline.enable_wiki_link()
     return Markdown(renderer, inline=inline)

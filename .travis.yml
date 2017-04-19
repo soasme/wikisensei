@@ -8,11 +8,11 @@ script:
   - python manage.py collectstatic
   - python manage.py test
 after_success:
-  - beeper build --version $TRAVIS_BUILD_NUMBER
+  - beeper build --version $TRAVIS_TAG
 deploy:
   provider: releases
   api_key: "$GITHUB_TOKEN"
-  file: "dist/wikisensei-$TRAVIS_BUILD_NUMBER.tgz"
+  file: "dist/wikisensei-$TRAVIS_TAG.tgz"
   skip_cleanup: true
   on:
     tags: true

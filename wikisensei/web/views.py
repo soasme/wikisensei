@@ -192,6 +192,13 @@ class WikiPage(WikiDetail):
         wiki = get_object_or_404(Wiki, user=user, title=self.__class__.page_title)
         return super(WikiPage, self).get(request, wiki.pk)
 
+class UserWikiHome(WikiDetail):
+
+    def get(self, request, username):
+        user = get_object_or_404(User, username=username)
+        wiki = get_root_wiki(user)
+        return super(UserWikiHome, self).get(request, wiki.pk)
+
 class Home(WikiPage):
     page_title = 'Home'
 

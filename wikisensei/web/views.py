@@ -184,13 +184,13 @@ class WikiList(APIView):
             'serializer': serializer,
         })
 
-class WikiPage(WikiDetail):
+class SiteWikiPage(WikiDetail):
     page_title = ROOT_WIKI_TITLE
 
     def get(self, request):
         user = get_object_or_404(User, username=settings.SITE_USERNAME)
         wiki = get_object_or_404(Wiki, user=user, title=self.__class__.page_title)
-        return super(WikiPage, self).get(request, wiki.pk)
+        return super(SiteWikiPage, self).get(request, wiki.pk)
 
 class UserWikiHome(WikiDetail):
 
@@ -199,11 +199,11 @@ class UserWikiHome(WikiDetail):
         wiki = get_root_wiki(user)
         return super(UserWikiHome, self).get(request, wiki.pk)
 
-class Home(WikiPage):
+class Home(SiteWikiPage):
     page_title = 'Home'
 
-class Price(WikiPage):
+class Price(SiteWikiPage):
     page_title = 'Price'
 
-class Help(WikiPage):
+class Help(SiteWikiPage):
     page_title = 'Help'

@@ -13,6 +13,8 @@ class Command(BaseCommand):
     help = 'Reset dev data in database.'
 
     def handle(self, *args, **options):
+        if not wikisensei.settings.DEBUG:
+            raise Exception('Not allowed executing this command in DEBUG mode.')
         for app in wikisensei.settings.INSTALLED_APPS:
             try:
                 management.call_command('migrate', app, 'zero')

@@ -14,7 +14,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for filename in glob('./wikisensei/stubs/*.json'):
-            print(colorize(text=filename, fg='cyan'))
+            if 'test_' in filename:
+                print(colorize(text='Ignore %s' % filename, fg='yellow'))
+                continue
+            else:
+                print(colorize(text=filename, fg='cyan'))
             with open(filename) as f:
                 data = f.read()
                 data = json.loads(data)

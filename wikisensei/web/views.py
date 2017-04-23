@@ -27,6 +27,8 @@ from wikisensei.wiki.services import validate_root_wiki_title
 from wikisensei.wiki.services import ROOT_WIKI_TITLE
 
 from wikisensei.prof.serializers import ProfileSettingSerializer
+from wikisensei.prof.serializers import CustomStyleSerializer
+from wikisensei.prof.services import get_custom_style
 
 from .permissions import ViewPrivateWikiPermission
 
@@ -86,6 +88,7 @@ class WikiDetail(APIView):
         return Response({
             'serializer': serializer,
             'wiki': wiki,
+            'style': get_custom_style(wiki.user),
         })
 
 class WikiCreate(APIView):
@@ -234,3 +237,24 @@ class Profile(APIView):
         if serializer.is_valid():
             serializer.save(user=request.user)
         return redirect('account_profile')
+
+class CustomStyle(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'accounts/custom_style.html'
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        style = get_custom_style(request.user)
+        serializer = CustomStyleSerializer(style, data={'css': style.css or ''})
+        serializer.is_valid()
+        return Response({
+            'serializer': serializer,
+        })
+
+    def post(self, request):
+        style = get_custom_style(request.user)
+        serializer = CustomStyleSerializer(style, data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+        return redirect('account_custom_style')

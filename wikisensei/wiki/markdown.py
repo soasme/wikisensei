@@ -5,6 +5,17 @@ import copy
 from mistune import Renderer, InlineGrammar, InlineLexer, Markdown
 
 class WikiLinkRenderer(Renderer):
+
+    def table(self, header, body):
+        """Rendering table element. Wrap header and body in it.
+        :param header: header part of the table.
+        :param body: body part of the table.
+        """
+        return (
+            '<table class="table">\n<thead>%s</thead>\n'
+            '<tbody>\n%s</tbody>\n</table>\n'
+        ) % (header, body)
+
     def wiki_link(self, alt, link):
         return '<a href="?next=%s">%s</a>' % (link, alt)
 

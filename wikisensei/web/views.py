@@ -25,6 +25,8 @@ from wikisensei.wiki.services import is_root_wiki
 from wikisensei.wiki.services import validate_root_wiki_title
 from wikisensei.wiki.services import ROOT_WIKI_TITLE
 
+from wikisensei.prof.serializers import ProfileSettingSerializer
+
 def index(request):
     if request.user.is_authenticated:
         return redirect('account_profile')
@@ -36,12 +38,6 @@ def price(request):
 
 def help(request):
     return render(request, 'site/help.html')
-
-@login_required
-def profile(request):
-    return render(request, 'accounts/profile.html', {
-        'user': request.user,
-    })
 
 
 class WikiDetail(APIView):
@@ -207,3 +203,24 @@ class Price(SiteWikiPage):
 
 class Help(SiteWikiPage):
     page_title = 'Help'
+
+class Profile(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'accounts/profile.html'
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        option = ProfileSettingSerializer.get_option_by_user(request.user)
+        serializer = ProfileSettingSerializer(option, data={})
+        serializer.is_valid()
+        return Response({
+            'serializer': serializer
+        })
+
+    def post(self, request):
+        option = ProfileSettingSerializer.get_option_by_user(request.user)
+        serializer = ProfileSettingSerializer(option, data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+        return redirect('account_profile')

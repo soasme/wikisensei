@@ -69,3 +69,21 @@ class WebTestCase(TestCase):
 
     def test_user_cannot_update_wiki_title_to_existed_wiki_title(self):
         pass
+
+    ### Profile Setting
+
+    def test_user_can_update_profile_setting(self):
+        # login
+        response = self.client.login(username='test', password='abcd.1234')
+        user = User.objects.get(username='test')
+
+        response = self.client.post(reverse('account_profile'), data={
+            'private_wiki': True,
+            'private_email': False,
+        })
+        self.assertEqual(response.status_code, 302)
+
+        response = self.client.get(reverse('account_profile'))
+        serializer = response.context['serializer']
+        self.assertTrue(serializer.data['private_wiki'])
+        self.assertFalse(serializer.data['private_email'])

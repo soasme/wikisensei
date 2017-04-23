@@ -1,23 +1,20 @@
 {% extends 'base.html' %}
 
 {% load account %}
+{% load rest_framework %}
 
 {% block content %}
   <div class="container">
-    <ul>
-    {% if user.is_authenticated %}
-      <li>
-        user: {% user_display user %}
-        <a href="{% url 'account_logout' %}">Logout</a>
-      </li>
-      <li><a href="{% url 'wiki_root' %}">Root Wiki</a></li>
-      <li><a href="{% url 'wiki_list' %}">My Wikis</a></li>
-      <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
-      <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
-    {% else %}
-      <li><a href="{% url 'account_login' %}">Sign In</a></li>
-      <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
-    {% endif %}
-    </ul>
+    <h1>Profile</h2>
+    <div>
+      See <a href="{% url 'wiki_root' %}">Root Wiki</a>.<br>
+      See <a href="{% url 'wiki_list' %}">My Wikis</a>.<br>
+      Account Management: <a href="{% url 'account_email' %}">Change E-mail</a>
+    </div>
+    <form action="{% url 'account_profile' %}" method="POST" id="update-account-profile-form">
+      {% csrf_token %}
+      {% render_form serializer template_pack='rest_framework/vertical' %}
+      <input type="submit" value="Save" class="btn btn-default">
+    </form>
   </div>
 {% endblock %}

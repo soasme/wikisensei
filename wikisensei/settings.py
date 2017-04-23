@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'wikisensei.wiki',
     'wikisensei.web',
     'wikisensei.powerpack',
+    'wikisensei.prof',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',

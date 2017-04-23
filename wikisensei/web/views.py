@@ -46,7 +46,7 @@ def help(request):
 class WikiDetail(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'wiki/show.html'
-    permissions = (
+    permission_classes = (
         ViewPrivateWikiPermission,
     )
 

@@ -116,3 +116,4 @@ app/static/admin
 
 deploy/
 wikisensei/static/
+wikisensei/settings_local.py

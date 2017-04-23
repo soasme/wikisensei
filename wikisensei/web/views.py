@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
+from django.http import HttpResponseForbidden
 
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.settings import api_settings
@@ -27,6 +28,8 @@ from wikisensei.wiki.services import ROOT_WIKI_TITLE
 
 from wikisensei.prof.serializers import ProfileSettingSerializer
 
+from .permissions import ViewPrivateWikiPermission
+
 def index(request):
     if request.user.is_authenticated:
         return redirect('account_profile')
@@ -43,6 +46,9 @@ def help(request):
 class WikiDetail(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'wiki/show.html'
+    permissions = (
+        ViewPrivateWikiPermission,
+    )
 
     def route_next(self, request, wiki):
         next_title = request.GET.get('next')
@@ -67,14 +73,13 @@ class WikiDetail(APIView):
     def get(self, request, pk):
         wiki = get_object_or_404(Wiki, pk=pk)
 
+        # check permission
+        self.check_object_permissions(request, wiki)
+
         # handle next
         res = self.route_next(request, wiki)
         if res:
             return res
-
-        # private wiki can only be seen by author.
-        if is_private(wiki) and wiki.user != request.user:
-            raise PermissionDenied
 
         serializer = WikiSerializer(wiki)
 
@@ -116,12 +121,14 @@ class WikiUpdate(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'wiki/update.html'
     authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (
+        IsAuthenticated,
+        ViewPrivateWikiPermission,
+    )
 
     def get(self, request, pk):
         wiki = get_object_or_404(Wiki, pk=pk)
-        if wiki.user != request.user:
-            raise PermissionDenied
+        self.check_object_permissions(request, wiki)
         serializer = WikiSerializer(wiki)
         return Response({
             'wiki': wiki,
@@ -130,6 +137,7 @@ class WikiUpdate(APIView):
 
     def post(self, request, pk):
         wiki = get_object_or_404(Wiki, pk=pk)
+        self.check_object_permissions(request, wiki)
 
         # user need to be author
         if wiki.user != request.user:
@@ -160,7 +168,9 @@ class WikiUpdate(APIView):
 
 class WikiRoot(WikiDetail):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (
+        IsAuthenticated,
+    )
 
     def get(self, request):
         wiki = get_root_wiki(request.user)

@@ -77,13 +77,20 @@ class WebTestCase(TestCase):
         response = self.client.login(username='test', password='abcd.1234')
         user = User.objects.get(username='test')
 
+        # set private wiki
         response = self.client.post(reverse('account_profile'), data={
             'private_wiki': True,
             'private_email': False,
         })
         self.assertEqual(response.status_code, 302)
 
+        # check setting
         response = self.client.get(reverse('account_profile'))
         serializer = response.context['serializer']
         self.assertTrue(serializer.data['private_wiki'])
         self.assertFalse(serializer.data['private_email'])
+
+        self.client.logout()
+        self.client.login(username='admin', password='abcd.1234')
+        response = self.client.get(reverse('user_wiki_home', kwargs=dict(username='test')))
+        self.assertEqual(response.status_code, 403)

@@ -4,6 +4,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from django.contrib.auth.models import User
 from .models import Option
+from .services import get_option
 
 class ProfileSettingSerializer(serializers.ModelSerializer):
 
@@ -27,10 +28,5 @@ class ProfileSettingSerializer(serializers.ModelSerializer):
         }
 
     @classmethod
-    def get_option_by_user(self, user):
-        try:
-            return user.option
-        except Option.DoesNotExist:
-            option = Option(user=user)
-            option.save()
-            return option
+    def get_option_by_user(cls, user):
+        return get_option(user)

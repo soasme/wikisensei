@@ -50,7 +50,10 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'pinax.stripe',
     'rest_framework',
+    'bootstrapform',
+    'pinax_theme_bootstrap',
 ]
 
 SITE_ID = 1
@@ -80,6 +83,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'pinax_theme_bootstrap.context_processors.theme',
             ],
         },
     },
@@ -165,6 +169,8 @@ CACHES = {
         'LOCATION': 'cache:11211',
     }
 }
+
+PINAX_STRIPE_DEFAULT_PLAN = 'tomato-monthly'
 
 # Testing
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'

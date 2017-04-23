@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{# for pinax-theme-bootstrap #}
+
+{% block content %}
+  {% block body_base %}
+    <section id="content_body">
+      <div class="container">
+        {% block body %}{% endblock %}
+      </div>
+    </section>
+  {% endblock %}
+
+  {% block footer_base %}
+    <hr />
+    <footer>
+      <div class="container">
+        {% block footer %}{% endblock %}
+      </div>
+    </footer>
+  {% endblock %}
+
+  {% block theme_script %}
+    <script src="{% static "pinax/js/theme.js" %}"></script>
+  {% endblock %}
+
+  {% block extra_body_base %}
+  {% block extra_body %}{% endblock %}
+  {% endblock %}
+
+{% endblock %}

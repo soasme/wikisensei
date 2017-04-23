@@ -5,9 +5,11 @@ django_extensions
 djangorestframework
 django-filter
 django-cors-headers
+django-anymail[mailgun]
+pinax-stripe
+pinax-theme-bootstrap
 mistune
 PyMySQL
 python-memcached
 whitenoise
-django-anymail[mailgun]
 gunicorn

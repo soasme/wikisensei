@@ -23,3 +23,5 @@ class Command(BaseCommand):
         management.call_command('migrate')
         management.call_command('flush', verbosity=1, interactive=False)
         management.call_command('add_stub')
+        management.call_command('sync_plans')
+        management.call_command('init_customers')

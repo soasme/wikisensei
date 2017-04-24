@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from __future__ import unicode_literals
 
 from django.conf import settings
@@ -14,6 +15,7 @@ class Wiki(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     version = models.IntegerField(default=0)
+    hash = models.CharField(max_length=32, null=True)
     privacy = models.IntegerField(default=Privacy.PUBLIC)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -29,7 +31,9 @@ class Version(models.Model):
     wiki = models.ForeignKey(Wiki, on_delete=models.CASCADE, related_name='versions')
     version = models.IntegerField(default=0)
     content = models.TextField()
+    compiled = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    compiled_at = models.DateTimeField(null=True)
 
     class Meta:
         ordering = ['-version']

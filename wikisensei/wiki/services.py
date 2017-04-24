@@ -112,4 +112,5 @@ def create_wikis_from_wiki(wiki):
     return [
         add_wiki(wiki.user, title, 'To be continued.')
         for title in nowiki_titles
+        if len(title) < Wiki._meta.get_field('title').max_length
     ]

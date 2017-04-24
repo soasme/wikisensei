@@ -25,6 +25,10 @@ class WikiTestCase(TestCase):
         self.assertEqual(self.wiki.version, 2)
         self.assertEqual(services.get_wiki_content(self.wiki).content, 'New Content')
 
+    def test_update_wiki_content_with_long_long_title(self):
+        services.update_wiki(self.wiki, 'title', '[[%s]]' % ('a' * 1000))
+        assert services.mget_pk_by_titles({'a' * 1000}) == {}
+
     def test_wiki_privacy(self):
         services.make_wiki_private(self.wiki)
         self.assertFalse(services.is_public(self.wiki))

@@ -27,6 +27,7 @@ from wikisensei.wiki.serializers import RevisionSerializer
 from wikisensei.wiki.services import get_root_wiki
 from wikisensei.wiki.services import is_private
 from wikisensei.wiki.services import get_next_wiki
+from wikisensei.wiki.services import delete_wiki
 from wikisensei.wiki.services import is_root_wiki
 from wikisensei.wiki.services import validate_root_wiki_title
 from wikisensei.wiki.services import ROOT_WIKI_TITLE
@@ -305,3 +306,20 @@ class CustomStyle(APIView):
         if serializer.is_valid():
             serializer.save(user=request.user)
         return redirect('account_custom_style')
+
+class WikiDelete(WikiDetail):
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (
+        IsAuthenticated,
+        ViewPrivateWikiPermission,
+    )
+
+    def post(self, request, pk):
+        wiki = get_object_or_404(Wiki, pk=pk)
+
+        # check permission
+        self.check_object_permissions(request, wiki)
+
+        delete_wiki(wiki)
+
+        return redirect('home')

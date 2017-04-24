@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^wiki/(?P<pk>\d+)/revisions/$', views.WikiRevisions.as_view(), name='wiki_revisions'),
     url(r'^wiki/(?P<pk>\d+)/revisions/(?P<version>\d+)/$', views.WikiRevision.as_view(), name='wiki_revision'),
     url(r'^wiki/(?P<pk>\d+)/$', views.WikiDetail.as_view(), name='wiki_show'),
+    url(r'^wiki/(?P<pk>\d+)/delete$', views.WikiDelete.as_view(), name='wiki_delete'),
     url(r'^wiki/(?P<username>\w+)/home/$', views.UserWikiHome.as_view(), name='user_wiki_home'),
     url(r'^wiki/create/$', views.WikiCreate.as_view(), name='wiki_create'),
     url(r'^wiki/list/$', views.WikiList.as_view(), name='wiki_list'),

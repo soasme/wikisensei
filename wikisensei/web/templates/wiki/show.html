@@ -35,16 +35,30 @@
     {% endcache %}
     <style>{{ style.css }}</style>
   </div>
-
+  <script type="text/tomato-template" id="wiki-ops-template">
+    <a class="btn btn-default" href="{% url 'wiki_update' pk=wiki.pk %}">Update</a>
+    <div class="btn-group">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="wiki-ops-more-actions">
+        <i class="glyphicon glyphicon-menu-down"></i>
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="wiki-ops-more-actions">
+        <li>
+          <form method="POST" action="{% url 'wiki_delete' pk=wiki.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn-link">Delete</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </script>
 {% endblock %}
 
 {% block script %}
   <script>
     {% if wiki.user == user %}
     $(function(){
-      var html = '<a class="btn btn-default" href="{% url 'wiki_update' pk=wiki.pk %}">Update</a>';
-      $(".wiki-ops").html(html);
-    })
+      $(".wiki-ops").html($("#wiki-ops-template").html());
+    });
     {% endif %}
   </script>
 {% endblock %}

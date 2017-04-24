@@ -6,6 +6,7 @@ from django.test import Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from wikisensei.wiki.services import get_root_wiki
+from wikisensei.wiki.services import add_wiki
 
 class WebTestCase(TestCase):
 
@@ -67,6 +68,26 @@ class WebTestCase(TestCase):
         serializer = response.context['serializer']
         self.assertEqual(['Home', 'New Page', 'Another'],
                          [i['title'] for i in serializer.data])
+
+    def test_user_can_delete_wiki(self):
+        # login
+        response = self.client.login(username='test', password='abcd.1234')
+        wiki = add_wiki(User.objects.get(username='test'), 'Test', 'Hello World')
+
+        # delete wiki
+        response = self.client.post(reverse('wiki_delete', kwargs={'pk': wiki.pk}))
+        response = self.client.get(reverse('wiki_show', kwargs={'pk': wiki.pk}))
+        assert response.status_code == 404
+
+    def test_user_cannot_delete_root_wiki(self):
+        # login
+        response = self.client.login(username='test', password='abcd.1234')
+        wiki = get_root_wiki(User.objects.get(username='test'))
+
+        # delete root wiki
+        response = self.client.post(reverse('wiki_delete', kwargs={'pk': wiki.pk}))
+        response = self.client.get(reverse('wiki_show', kwargs={'pk': wiki.pk}))
+        assert response.status_code == 200
 
 
     def test_user_create_private_wiki(self):

@@ -114,3 +114,7 @@ def create_wikis_from_wiki(wiki):
         for title in nowiki_titles
         if len(title) < Wiki._meta.get_field('title').max_length
     ]
+
+def delete_wiki(wiki):
+    if wiki.title != ROOT_WIKI_TITLE:
+        wiki.delete()

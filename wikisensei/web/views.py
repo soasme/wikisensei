@@ -127,7 +127,7 @@ class WikiCreate(APIView):
         return redirect('wiki_show', pk=serializer.data.get('id'))
 
 class WikiRevisionsPagination(PageNumberPagination):
-    page_size = 4
+    page_size = 50
 
 class WikiRevisions(generics.ListAPIView):
     renderer_classes = [TemplateHTMLRenderer]

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load web %}
+{% load humanize %}
+
+{% block content %}
+  <div class="container">
+    <h1>Revisions</h1>
+    <table class="table">
+    {% for revision in revisions.results %}
+    <tr>
+      <td>
+        <a href="{% url 'wiki_revision' pk=revision.wiki_id version=revision.version %}">
+          {{ revision.version }}
+        </a>
+      </td>
+      <td>
+        <a href="{% url 'wiki_revision' pk=revision.wiki_id version=revision.version %}">
+          {{ revision.created_at | iso8601 | naturaltime }}
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+    </table>
+    <nav aria-label="revisions">
+      <ul class="pager">
+      {% if revisions.previous %}
+      <li class="previous"><a href="{{ revisions.previous }}"><span aria-hidden="true">&larr;</span> Newer</a></li>
+      {% endif %}
+      {% if revisions.next %}
+      <li class="next"><a href="{{ revisions.next }}">Older <span aria-hidden="true">&rarr;</span></a></li>
+      {% endif %}
+      </ul>
+    </nav>
+  </div>
+{% endblock %}

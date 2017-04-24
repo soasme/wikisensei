@@ -5,6 +5,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from .models import Wiki
+from .models import Version
 from .models import Privacy
 from .services import get_wiki_content
 from .services import get_wiki_revision
@@ -12,6 +13,11 @@ from .services import add_wiki
 from .services import update_wiki
 from .services import render_wiki_html
 from .services import create_wikis_from_wiki
+
+class RevisionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Version
+        fields = ('id', 'created_at', 'version', 'wiki_id', )
 
 class WikiSerializer(serializers.Serializer):
 

@@ -11,14 +11,19 @@ from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.http import HttpResponseForbidden
 
+from rest_framework import generics
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.settings import api_settings
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.mixins import ListModelMixin
+from rest_framework.pagination import PageNumberPagination
 from wikisensei.wiki.models import Wiki
+from wikisensei.wiki.models import Version
 from wikisensei.wiki.serializers import WikiSerializer
+from wikisensei.wiki.serializers import RevisionSerializer
 from wikisensei.wiki.services import get_root_wiki
 from wikisensei.wiki.services import is_private
 from wikisensei.wiki.services import get_next_wiki
@@ -121,8 +126,39 @@ class WikiCreate(APIView):
         serializer.save(user=request.user)
         return redirect('wiki_show', pk=serializer.data.get('id'))
 
-class WikiRevisions(APIView):
-    pass
+class WikiRevisionsPagination(PageNumberPagination):
+    page_size = 4
+
+class WikiRevisions(generics.ListAPIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'wiki/revisions.html'
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    serializer_class = RevisionSerializer
+    model = serializer_class.Meta.model
+    pagination_class = WikiRevisionsPagination
+    permission_classes = (
+        IsAuthenticated,
+        ViewPrivateWikiPermission,
+    )
+
+    def get_object(self):
+        view, args, kwargs = self.request.resolver_match
+        pk = kwargs['pk']
+        wiki = get_object_or_404(Wiki, pk=pk)
+        self.check_object_permissions(self.request, wiki)
+        return wiki
+
+    def get_queryset(self):
+        wiki = self.get_object()
+        queryset = self.model.objects.filter(wiki=wiki)
+        return queryset.order_by('-version')
+
+    def list(self, request, **kwargs):
+        response = super(WikiRevisions, self).list(request)
+        return Response({
+            'revisions': response.data
+        })
+
 
 class WikiRevision(WikiDetail):
 

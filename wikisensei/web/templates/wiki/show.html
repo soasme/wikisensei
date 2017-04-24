@@ -12,7 +12,7 @@
   {% endif %}
 
   <div class="container">
-    {% cache 86400 wiki wiki.pk version "v1" %}
+    {% cache 86400 wiki wiki.pk version "v2" %}
     <h1>{{ wiki.title }}</h1>
     <div class="row">
       <div class="col-md-8">
@@ -20,7 +20,9 @@
           <span class="text-muted">Updated at {{ serializer.data.updated_at | naturaltime }}</span>
           <span>·</span>
           <span class="text-muted">
-            {{ wiki.version }} revisions.
+            <a href="{% url 'wiki_revisions' pk=wiki.id %}">
+              {{ wiki.version }} revisions.
+            </a>
           </span>
         </div>
       </div>

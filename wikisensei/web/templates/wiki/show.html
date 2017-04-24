@@ -2,16 +2,26 @@
 {% load rest_framework %}
 {% load cache %}
 {% load humanize %}
+{% load web %}
 
 {% block content %}
+  {% if serializer.context.version %}
+    {% define serializer.context.version as version %}
+  {% else %}
+    {% define wiki.version as version %}
+  {% endif %}
+
   <div class="container">
+    {% cache 86400 wiki wiki.pk version "v1" %}
     <h1>{{ wiki.title }}</h1>
     <div class="row">
       <div class="col-md-8">
         <div class="vcenter">
-          <span class="text-muted">Updated at {{ wiki.updated_at | naturaltime }}</span>
+          <span class="text-muted">Updated at {{ serializer.data.updated_at | naturaltime }}</span>
           <span>·</span>
-          <span class="text-muted">{{ wiki.version }} revisions.</span>
+          <span class="text-muted">
+            {{ wiki.version }} revisions.
+          </span>
         </div>
       </div>
       <div class="col-md-4">
@@ -19,7 +29,6 @@
         </div>
       </div>
     </div>
-    {% cache 86400 wiki wiki.pk wiki.version "compiled" %}
     <div>{{ serializer.data.html | safe }}</div>
     {% endcache %}
     <style>{{ style.css }}</style>

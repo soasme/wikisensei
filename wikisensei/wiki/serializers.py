@@ -7,6 +7,7 @@ from rest_framework.validators import UniqueTogetherValidator
 from .models import Wiki
 from .models import Privacy
 from .services import get_wiki_content
+from .services import get_wiki_revision
 from .services import add_wiki
 from .services import update_wiki
 from .services import render_wiki_html
@@ -75,7 +76,14 @@ class WikiSerializer(serializers.Serializer):
         return instance
 
     def to_representation(self, wiki):
-        content = get_wiki_content(wiki).content
+        if self.context.get('version'):
+            revision = get_wiki_revision(wiki, self.context['version'])
+            content = revision.content
+            updated_at = revision.created_at
+        else:
+            revision = get_wiki_content(wiki)
+            content = revision.content
+            updated_at = revision.created_at
         html = render_wiki_html(content)
         return {
             'id': wiki.id,
@@ -83,5 +91,5 @@ class WikiSerializer(serializers.Serializer):
             'content': content,
             'html': html,
             'created_at': wiki.created_at,
-            'updated_at': wiki.updated_at,
+            'updated_at': updated_at,
         }

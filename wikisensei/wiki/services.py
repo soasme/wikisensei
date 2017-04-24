@@ -51,6 +51,9 @@ def get_wiki_content(wiki):
     content = versions.get(version=version_num)
     return content
 
+def get_wiki_revision(wiki, version):
+    return Version.objects.get(wiki=wiki, version=version)
+
 def render_wiki_html(content):
     parser = Parser()
     html = parser(content)

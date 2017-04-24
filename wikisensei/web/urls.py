@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^accounts/profile/$', views.Profile.as_view(), name='account_profile'),
     url(r'^accounts/custom_style/$', views.CustomStyle.as_view(), name='account_custom_style'),
     url(r'^wiki/(?P<pk>\d+)/update', views.WikiUpdate.as_view(), name='wiki_update'),
+    url(r'^wiki/(?P<pk>\d+)/revisions/(?P<version>\d+)', views.WikiRevision.as_view(), name='wiki_revision'),
     url(r'^wiki/(?P<pk>\d+)/', views.WikiDetail.as_view(), name='wiki_show'),
     url(r'^wiki/(?P<username>\w+)/home', views.UserWikiHome.as_view(), name='user_wiki_home'),
     url(r'^wiki/create/$', views.WikiCreate.as_view(), name='wiki_create'),

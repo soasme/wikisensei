@@ -72,8 +72,9 @@ class WikiDetail(APIView):
         # case: Redirect to wiki.
         return redirect('wiki_show', pk=wiki.pk)
 
-    def get(self, request, pk):
+    def get(self, request, pk, version=None):
         wiki = get_object_or_404(Wiki, pk=pk)
+        version = version or wiki.version
 
         # check permission
         self.check_object_permissions(request, wiki)
@@ -83,7 +84,7 @@ class WikiDetail(APIView):
         if res:
             return res
 
-        serializer = WikiSerializer(wiki)
+        serializer = WikiSerializer(wiki, context={'version': version})
 
         return Response({
             'serializer': serializer,
@@ -119,6 +120,19 @@ class WikiCreate(APIView):
             })
         serializer.save(user=request.user)
         return redirect('wiki_show', pk=serializer.data.get('id'))
+
+class WikiRevisions(APIView):
+    pass
+
+class WikiRevision(WikiDetail):
+
+    def get(self, request, pk, version):
+        wiki = get_object_or_404(Wiki, pk=pk)
+        version = int(version)
+        if version > wiki.version:
+            raise Http404()
+        return super(WikiRevision, self).get(request, pk, version)
+
 
 class WikiUpdate(APIView):
     renderer_classes = [TemplateHTMLRenderer]

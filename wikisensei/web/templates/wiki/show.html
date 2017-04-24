@@ -5,7 +5,6 @@
 
 {% block content %}
   <div class="container">
-    {% cache 86400 wiki wiki.pk wiki.version %}
     <h1>{{ wiki.title }}</h1>
     <div class="row">
       <div class="col-md-8">
@@ -20,6 +19,7 @@
         </div>
       </div>
     </div>
+    {% cache 86400 wiki wiki.pk wiki.version "compiled" %}
     <div>{{ serializer.data.html | safe }}</div>
     {% endcache %}
     <style>{{ style.css }}</style>

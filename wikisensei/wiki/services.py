@@ -13,8 +13,8 @@ from .markdown import Parser
 
 ROOT_WIKI_TITLE = 'Home'
 
-def add_wiki(user, title, content):
-    wiki = Wiki(user=user, title=title, version=1)
+def add_wiki(user, title, content, privacy=Privacy.PUBLIC):
+    wiki = Wiki(user=user, title=title, version=1, privacy=privacy)
     wiki.save()
     content = Version(wiki=wiki, version=1, content=content)
     content.save()

@@ -146,11 +146,7 @@ class WikiUpdate(APIView):
         if wiki.user != request.user:
             raise PermissionDenied
 
-        data = {
-            'title': request.data.get('title'),
-            'content': request.data.get('content'),
-        }
-        serializer = WikiSerializer(wiki, data=data)
+        serializer = WikiSerializer(wiki, data=request.data)
 
         # validate
         if not serializer.is_valid():
@@ -159,7 +155,8 @@ class WikiUpdate(APIView):
             serializer._errors['title'].extend(
                 serializer.errors.get(api_settings.NON_FIELD_ERRORS_KEY, [])
             )
-            del serializer._errors[api_settings.NON_FIELD_ERRORS_KEY]
+            if api_settings.NON_FIELD_ERRORS_KEY in serializer._errors:
+                del serializer._errors[api_settings.NON_FIELD_ERRORS_KEY]
             return Response({
                 'wiki': wiki,
                 'serializer': serializer,

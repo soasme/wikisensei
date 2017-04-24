@@ -38,7 +38,7 @@ class WebTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # update form
-        data = {'title': 'Home', 'content': 'Hello World!!!'}
+        data = {'title': 'Home', 'content': 'Hello World!!!', 'privacy': 'public'}
         response = self.client.post(reverse('wiki_update', kwargs={'pk': wiki.pk}), data)
         self.assertEqual(response.status_code, 302)
 
@@ -56,7 +56,8 @@ class WebTestCase(TestCase):
         # update form
         data = {
             'title': 'Home',
-            'content': '[[New Page]] [[New Page]] [[Another Page|Another]]'
+            'content': '[[New Page]] [[New Page]] [[Another Page|Another]]',
+            'privacy': 'public',
         }
         response = self.client.post(reverse('wiki_update', kwargs={'pk': wiki.pk}), data)
         self.assertEqual(response.status_code, 302)

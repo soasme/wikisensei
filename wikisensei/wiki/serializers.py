@@ -5,6 +5,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from .models import Wiki
+from .models import Privacy
 from .services import get_wiki_content
 from .services import add_wiki
 from .services import update_wiki
@@ -17,6 +18,15 @@ class WikiSerializer(serializers.Serializer):
     content = serializers.CharField(
         style={'base_template': 'textarea.html', 'rows': 20},
     )
+    privacy = serializers.ChoiceField([
+        ('private', 'Private'),
+        ('public', 'Public'),
+    ])
+
+    privacy_map = {
+        'private': Privacy.PRIVATE,
+        'public': Privacy.PUBLIC,
+    }
 
     class Meta:
         validators = [
@@ -50,6 +60,7 @@ class WikiSerializer(serializers.Serializer):
             user=validated_data['user'],
             title=validated_data['title'],
             content=validated_data['content'],
+            privacy=self.privacy_map[validated_data['privacy']],
         )
         create_wikis_from_wiki(wiki)
         return wiki

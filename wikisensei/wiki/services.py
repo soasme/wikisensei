@@ -20,7 +20,7 @@ def add_wiki(user, title, content, privacy=Privacy.PUBLIC):
     content.save()
     return wiki
 
-def update_wiki(wiki, title, content):
+def update_wiki(wiki, title, content, privacy=Privacy.PUBLIC):
     latest_version = wiki.versions.first()
     assert latest_version, 'Wiki has at least one version.'
 
@@ -37,8 +37,11 @@ def update_wiki(wiki, title, content):
     if wiki.title != title or wiki.version != next_version_num:
         wiki.title = title
         wiki.version = next_version_num
-        wiki.save()
 
+    if wiki.privacy != privacy:
+        wiki.privacy = privacy
+
+    wiki.save()
     return wiki
 
 def get_wiki_content(wiki):

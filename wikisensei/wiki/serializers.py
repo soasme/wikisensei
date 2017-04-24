@@ -68,7 +68,8 @@ class WikiSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         update_wiki(instance,
             title=validated_data.get('title'),
-            content=validated_data.get('content')
+            content=validated_data.get('content'),
+            privacy=self.privacy_map[validated_data['privacy']],
         )
         create_wikis_from_wiki(instance)
         return instance

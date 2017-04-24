@@ -68,6 +68,26 @@ class WebTestCase(TestCase):
         self.assertEqual(['Home', 'New Page', 'Another'],
                          [i['title'] for i in serializer.data])
 
+
+    def test_user_create_private_wiki(self):
+        # login
+        response = self.client.login(username='test', password='abcd.1234')
+        wiki = get_root_wiki(User.objects.get(username='test'))
+
+        # update form
+        data = {
+            'title': 'Home',
+            'content': 'Hello World',
+            'privacy': 'private',
+        }
+        response = self.client.post(reverse('wiki_update', kwargs={'pk': wiki.pk}), data)
+        self.assertEqual(response.status_code, 302)
+
+        self.client.logout()
+        self.client.login(username='admin', password='abcd.1234')
+        response = self.client.get(reverse('user_wiki_home', kwargs=dict(username='test')))
+        self.assertEqual(response.status_code, 403)
+
     def test_user_cannot_update_wiki_title_to_existed_wiki_title(self):
         pass
 

@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import json
+import stripe
 
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -12,7 +13,8 @@ from django.shortcuts import redirect
 
 from wikisensei import settings
 from .models import MonthlyPlan, AnnualPlan
-from .services import ensure_customer, subscribe, cancel_subscription, get_subscription_by_user
+from .services import ensure_customer, subscribe, cancel_subscription
+from .services import add_webhook_event, get_subscription_by_user
 from .webhook import handle as webhook_handler
 
 @login_required

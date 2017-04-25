@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^subscribe/successfully/$', views.subscribe_successfully, name='subscribe_successfully'),
     url(r'^cancel/successfully$', views.unsubscribe_successfully, name='unsubscribe_successfully'),
     url(r'^cancel/$', views.unsubscribe, name='subscription_cancel'),
+    url(r'^webhook/$', views.webhook, name='subscription_webhook'),
 ]

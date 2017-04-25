@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from .models import Subscription
+from .services import cancel_subscription
+
 def handle_customer_subscription_deleted(event):
     _subscription = event.data['object']
 

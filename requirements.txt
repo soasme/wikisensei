@@ -6,10 +6,9 @@ djangorestframework
 django-filter
 django-cors-headers
 django-anymail[mailgun]
-pinax-stripe
-pinax-theme-bootstrap
 mistune
 PyMySQL
+stripe
 python-memcached
 python-dateutil
 whitenoise

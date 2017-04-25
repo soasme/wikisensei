@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Subscribe successfully</h1>
+<p>
+  You have successfully subscribed this plan.
+  Redirecting to <a href="{% url 'home' %}">Home</a>.
+</p>
+<script>
+setTimeout(function(){
+  window.location.href = "{% url 'home' %}";
+}, 5000)
+</script>
+{% endblock %}

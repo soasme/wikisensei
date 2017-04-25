@@ -2,18 +2,24 @@
 
 {% load account %}
 {% load rest_framework %}
+{% load subscription %}
 
 {% block content %}
   <div class="container">
     <h1>Profile</h2>
+    <h3>Settings</h3>
     <div>
       See <a href="{% url 'wiki_root' %}">Root Wiki</a>.<br>
       See <a href="{% url 'wiki_list' %}">My Wikis</a>.<br>
-      See <a href="{% url 'pinax_stripe_invoice_list' %}">My Invoices</a>.<br>
-      See <a href="{% url 'pinax_stripe_subscription_list' %}">My Subscriptions</a>.<br>
-      See <a href="{% url 'pinax_stripe_payment_method_list' %}">My Payments</a>.<br>
-      Account Management: <a href="{% url 'account_email' %}">Change E-mail</a>
+      Change Email: <a href="{% url 'account_email' %}">Change E-mail</a>
     </div>
+    <hr>
+    <h3>Plan</h3>
+    <div>
+      {% cancel_subscription user %}
+    </div>
+    <hr>
+    <h3>Privacy</h3>
     <form action="{% url 'account_profile' %}" method="POST" id="update-account-profile-form">
       {% csrf_token %}
       {% render_form serializer template_pack='rest_framework/vertical' %}

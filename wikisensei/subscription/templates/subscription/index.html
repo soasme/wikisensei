@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Subscribe</h1>
+<table class="table">
+  <thead><tr>
+      <th>Plan</th>
+      <th style="text-align:center">Interval</th>
+      <th style="text-align:center">Description</th>
+      <th style="text-align:center">Price</th>
+      <th style="text-align:center">Subscribe</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Tomato Monthly Plan</td>
+      <td style="text-align:center">Monthly</td>
+      <td style="text-align:center">The monthly subscription plan to Tomato.</td>
+      <td style="text-align:center">$1.99</td>
+      <td style="text-align:center">
+        <form action="{% url 'subscription_charge' plan=monthly_plan.id %}"
+              method="POST">
+          {% csrf_token %}
+          <script src="//checkout.stripe.com/checkout.js"
+                  class="stripe-button"
+                  data-key="{{ key  }}"
+                  data-email="{{ user.email }}"
+                  data-name="{{ monthly_plan.name }}"
+                  data-description="{{ monthly_plan.description }}"
+                  data-amount="{{ monthly_plan.price }}"
+                  data-label="Subscribe"
+                  data-locale="auto"></script>
+        </form>
+      </th>
+    </tr>
+    <tr>
+      <td>Tomato Annual Plan</td>
+      <td style="text-align:center">Yearly</td>
+      <td style="text-align:center">The annual subscription plan to Tomato.</td>
+      <td style="text-align:center">$19.99</td>
+      <td style="text-align:center">
+        <form action="{% url 'subscription_charge' plan=annual_plan.id %}"
+              method="POST">
+          {% csrf_token %}
+          <script src="//checkout.stripe.com/checkout.js"
+                  class="stripe-button"
+                  data-key="{{ key  }}"
+                  data-email="{{ user.email }}"
+                  data-name="{{ annual_plan.name }}"
+                  data-description="{{ annual_plan.description }}"
+                  data-amount="{{ annual_plan.price }}"
+                  data-label="Subscribe"
+                  data-locale="auto"></script>
+        </form>
+      </th>
+    </tr>
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% if subscription %}
+<form action="{% url "subscription_cancel" %}" method="POST">
+  <input type="hidden" name='csrfmiddlewaretoken' value="{{ context.csrf_token }}">
+  <input type="submit" value="Cancel Subscription" class="btn btn-danger">
+</form>
+{% endif %}
+<p>Check <a href="{% url 'subscription_plans' %}">Plans</a>.<p>

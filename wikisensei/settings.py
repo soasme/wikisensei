@@ -168,6 +168,11 @@ CACHES = {
     }
 }
 
+STRIPE = {
+    'publishable_key': '',
+    'secret_key': '',
+}
+
 # Testing
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 if TESTING:

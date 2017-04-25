@@ -37,6 +37,7 @@ from wikisensei.prof.serializers import CustomStyleSerializer
 from wikisensei.prof.services import get_custom_style
 
 from .permissions import ViewPrivateWikiPermission
+from .permissions import SubscriptionRequiredPermission
 
 def index(request):
     if request.user.is_authenticated:
@@ -102,7 +103,10 @@ class WikiCreate(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'wiki/create.html'
     authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (
+        IsAuthenticated,
+        SubscriptionRequiredPermission,
+    )
 
     def get(self, request):
         serializer = WikiSerializer(data={
@@ -140,6 +144,7 @@ class WikiRevisions(generics.ListAPIView):
     permission_classes = (
         IsAuthenticated,
         ViewPrivateWikiPermission,
+        SubscriptionRequiredPermission,
     )
 
     def get_object(self):
@@ -162,6 +167,10 @@ class WikiRevisions(generics.ListAPIView):
 
 
 class WikiRevision(WikiDetail):
+    permission_classes = (
+        ViewPrivateWikiPermission,
+        SubscriptionRequiredPermission,
+    )
 
     def get(self, request, pk, version):
         wiki = get_object_or_404(Wiki, pk=pk)
@@ -232,7 +241,10 @@ class WikiList(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'wiki/list.html'
     authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (
+        IsAuthenticated,
+        SubscriptionRequiredPermission,
+    )
 
     def get(self, request):
         wikis = Wiki.objects.filter(user=request.user)
@@ -290,7 +302,10 @@ class CustomStyle(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'accounts/custom_style.html'
     authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (
+        IsAuthenticated,
+        SubscriptionRequiredPermission,
+    )
 
     def get(self, request):
         style = get_custom_style(request.user)

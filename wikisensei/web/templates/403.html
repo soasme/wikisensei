@@ -5,7 +5,9 @@
 {% block content %}
     <header class="jumbotron subhead" id="overview">
       <h1>{% trans "Permission denied!" %}</h1>
-      <p class="lead">{% trans "We're sorry but you are not permitted to access this page." %}</p>
+      <p class="lead">{% trans "We're sorry but you are not permitted to access this page." %}
+      {% trans detail %}
+      </p>
     </header>
 {% endblock %}
 

@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from wikisensei.wiki.services import get_root_wiki
 from wikisensei.wiki.services import add_wiki
+from wikisensei.subscription.services import subscribe_without_plan
 
 class WebTestCase(TestCase):
 
@@ -52,7 +53,9 @@ class WebTestCase(TestCase):
     def test_user_can_create_wikis_from_root_wiki(self):
         # login
         response = self.client.login(username='test', password='abcd.1234')
-        wiki = get_root_wiki(User.objects.get(username='test'))
+        user = User.objects.get(username='test')
+        subscribe_without_plan(user)
+        wiki = get_root_wiki(user)
 
         # update form
         data = {

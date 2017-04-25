@@ -32,6 +32,11 @@ def ensure_customer(user):
 
     return customer
 
+def subscribe_without_plan(user):
+    subscription = Subscription(user=user, stripe_id='')
+    subscription.save()
+    return subscription
+
 def get_subscription_by_user(user):
     try:
         return Subscription.objects.get(user=user)

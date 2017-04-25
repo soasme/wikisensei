@@ -4,9 +4,9 @@ import json
 
 from django.core import serializers
 from django.db import IntegrityError
+from django.conf import settings
 import stripe
 
-from wikisensei import settings
 from .models import Customer, Subscription, SubscriptionEvent
 
 stripe.api_key = settings.STRIPE['secret_key']

@@ -40,8 +40,12 @@ def get_subscription_by_user(user):
 
 def subscribe(customer, plan, token):
     try:
-        # If subscription exists, change it to a new plan.
         subscription = Subscription.objects.get(user=customer.user)
+    except Subscription.DoesNotExist:
+        subscription = None
+
+    if subscription and subscription.stripe_id:
+        # If subscription exists and related to a plan, change it to a new plan.
         _subscription = stripe.Subscription.retrieve(subscription.stripe_id)
         _subscription.plan = plan
         _subscription.source = token
@@ -56,7 +60,7 @@ def subscribe(customer, plan, token):
             }
         })
 
-    except Subscription.DoesNotExist:
+    else:
 
         # If subscription does not exists, create a new remote subscription.
         _subscription = stripe.Subscription.create(
@@ -83,15 +87,17 @@ def subscribe(customer, plan, token):
     return subscription
 
 def cancel_subscription(subscription):
-    _subscription = stripe.Subscription.retrieve(subscription.stripe_id)
+    if subscription.stripe_id:
+        _subscription = stripe.Subscription.retrieve(subscription.stripe_id)
+        _subscription.delete()
+
     log_subscription_event(subscription.user, {
         'action': 'cancel_subscription',
         'data': {
             'subscription': serializers.serialize('json', [subscription]),
-            'raw': str(_subscription),
         }
     })
-    _subscription.delete()
+
     subscription.delete()
 
 def log_subscription_event(user, data):

@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load rest_framework %}
 
+{% block title %}
+Create Wiki
+{% endblock %}
+
 {% block content %}
   <form action="{% url 'wiki_create' %}" method="POST">
     {% csrf_token %}

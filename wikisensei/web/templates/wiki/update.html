@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load rest_framework %}
 
+{% block title %}
+Update "{{ wiki.title }}"
+{% endblock %}
+
 {% block content %}
   <form action="{% url 'wiki_update' pk=wiki.pk %}" method="POST" id="wiki-update-form">
     {% csrf_token %}

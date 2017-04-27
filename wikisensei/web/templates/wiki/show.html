@@ -4,6 +4,10 @@
 {% load humanize %}
 {% load web %}
 
+{% block title %}
+{{ wiki.title }}
+{% endblock %}
+
 {% block content %}
   {% if serializer.context.version %}
     {% define serializer.context.version as version %}

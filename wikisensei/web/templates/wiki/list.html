@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+{% load account %}
+
+{% block title %}
+@{% user_display user %}'s Wiki List
+{% endblock %}
 
 {% block content %}
   <ul>

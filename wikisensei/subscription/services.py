@@ -19,7 +19,6 @@ def ensure_customer(user):
     except Customer.DoesNotExist:
         # Create a new customer if not exists
         _customer = stripe.Customer.create(
-            id=user.id,
             email=user.email,
         )
 

@@ -27,17 +27,29 @@ class Customer(models.Model):
     stripe_id = models.CharField(max_length=64)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return 'customer-' + self.user.username
+
 class Subscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     stripe_id = models.CharField(max_length=64)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return 'subscription-' + self.user.username
 
 class SubscriptionEvent(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     data = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return 'subscription_event-' + self.user.username
+
 class WebhookEvent(models.Model):
     stripe_id = models.CharField(max_length=64, unique=True)
     data = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return 'webhook-' + self.stripe_id

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.conf import settings
 from rest_framework import permissions, exceptions
 from wikisensei.wiki.services import is_private as is_wiki_private
 from wikisensei.prof.services import is_all_wikis_private
@@ -22,6 +23,10 @@ class SubscriptionRequiredPermission(permissions.BasePermission):
     message = 'Subscribed to a plan required.'
 
     def has_permission(self, request, view):
+        # if stripe is not enabled, then we do not check this permission.
+        if not settings.STRIPE.get('enabled'):
+            return True
+
         user = request.user
 
         if not user.is_authenticated:

@@ -169,6 +169,7 @@ CACHES = {
 }
 
 STRIPE = {
+    'enabled': False,
     'publishable_key': '',
     'secret_key': '',
 }

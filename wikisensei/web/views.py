@@ -53,6 +53,7 @@ def help(request):
 
 
 class WikiDetail(APIView):
+    page_title = None
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'wiki/show.html'
     permission_classes = (
@@ -97,6 +98,7 @@ class WikiDetail(APIView):
             'serializer': serializer,
             'wiki': wiki,
             'style': get_custom_style(wiki.user),
+            'title': self.page_title or wiki.title,
         })
 
 class WikiCreate(APIView):
@@ -254,11 +256,11 @@ class WikiList(APIView):
         })
 
 class SiteWikiPage(WikiDetail):
-    page_title = ROOT_WIKI_TITLE
+    wiki_title = ROOT_WIKI_TITLE
 
     def get(self, request):
         user = get_object_or_404(User, username=settings.SITE_USERNAME)
-        wiki = get_object_or_404(Wiki, user=user, title=self.__class__.page_title)
+        wiki = get_object_or_404(Wiki, user=user, title=self.__class__.wiki_title)
         return super(SiteWikiPage, self).get(request, wiki.pk)
 
 class UserWikiHome(WikiDetail):
@@ -269,13 +271,14 @@ class UserWikiHome(WikiDetail):
         return super(UserWikiHome, self).get(request, wiki.pk)
 
 class Home(SiteWikiPage):
-    page_title = 'Home'
+    wiki_title = 'Home'
+    page_title = 'Tomato'
 
 class Price(SiteWikiPage):
-    page_title = 'Price'
+    wiki_title = 'Price'
 
 class Help(SiteWikiPage):
-    page_title = 'Help'
+    wiki_title = 'Help'
 
 class Profile(APIView):
     renderer_classes = [TemplateHTMLRenderer]

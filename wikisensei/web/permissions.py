@@ -5,6 +5,7 @@ from rest_framework import permissions, exceptions
 from wikisensei.wiki.services import is_private as is_wiki_private
 from wikisensei.prof.services import is_all_wikis_private
 from wikisensei.subscription.services import get_subscription_by_user
+from wikisensei.subscription.services import is_exempted
 
 class ViewPrivateWikiPermission(permissions.BasePermission):
     message = 'Viewing private wiki not allowed.'
@@ -31,6 +32,9 @@ class SubscriptionRequiredPermission(permissions.BasePermission):
 
         if not user.is_authenticated:
             return False
+
+        if is_exempted(user):
+            return True
 
         if not get_subscription_by_user(user):
             return False

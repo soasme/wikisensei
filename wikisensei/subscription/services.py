@@ -7,7 +7,10 @@ from django.db import IntegrityError
 from django.conf import settings
 import stripe
 
-from .models import Customer, Subscription, SubscriptionEvent
+from .models import (
+    Customer, Subscription, SubscriptionEvent,
+    WebhookEvent, SubscriptionExemption,
+)
 
 stripe.api_key = settings.STRIPE['secret_key']
 
@@ -116,3 +119,9 @@ def add_webhook_event(json_data):
     query = dict(stripe_id=id, data=json.dumps(json_data))
     event, _ = WebhookEvent.objects.get_or_create(**query)
     return event
+
+def is_exempted(user):
+    try:
+        return bool(SubscriptionExemption.objects.get(user=user))
+    except SubscriptionExemption.DoesNotExist:
+        return False

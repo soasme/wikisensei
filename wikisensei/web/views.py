@@ -101,6 +101,8 @@ class WikiDetail(APIView):
             'title': self.page_title or wiki.title,
         })
 
+
+
 class WikiCreate(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'wiki/create.html'

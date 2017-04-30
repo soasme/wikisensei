@@ -21,9 +21,9 @@ class WikiTestCase(TestCase):
         self.assertEqual(services.mget_pk_by_titles({'Title', }), {'Title': self.wiki.pk})
 
     def test_update_wiki(self):
-        services.update_wiki(self.wiki, 'title', 'New Content')
+        services.update_wiki(self.wiki, 'title', u'New Content 中文')
         self.assertEqual(self.wiki.version, 2)
-        self.assertEqual(services.get_wiki_content(self.wiki).content, 'New Content')
+        self.assertEqual(services.get_wiki_content(self.wiki).content, u'New Content 中文')
 
     def test_update_wiki_content_with_long_long_title(self):
         services.update_wiki(self.wiki, 'title', '[[%s]]' % ('a' * 1000))

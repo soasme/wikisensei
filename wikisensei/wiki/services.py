@@ -16,7 +16,7 @@ ROOT_WIKI_TITLE = 'Home'
 
 def add_wiki(user, title, content, privacy=Privacy.PUBLIC):
     wiki = Wiki(user=user, title=title, version=1, privacy=privacy)
-    wiki.hash = md5(content).hexdigest()
+    wiki.hash = md5(content.encode('utf8')).hexdigest()
     wiki.save()
     content = Version(wiki=wiki, version=1, content=content)
     content.save()
@@ -38,7 +38,7 @@ def update_wiki(wiki, title, content, privacy=Privacy.PUBLIC):
 
     if wiki.title != title or wiki.version != next_version_num:
         wiki.title = title
-        wiki.hash = md5(content).hexdigest()
+        wiki.hash = md5(content.encode('utf8')).hexdigest()
         wiki.version = next_version_num
 
     if wiki.privacy != privacy:

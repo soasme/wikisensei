@@ -26,8 +26,8 @@ class WikiSerializer(serializers.Serializer):
         style={'base_template': 'textarea.html', 'rows': 20},
     )
     privacy = serializers.ChoiceField([
-        ('private', 'Private'),
         ('public', 'Public'),
+        ('private', 'Private'),
     ])
 
     privacy_map = {

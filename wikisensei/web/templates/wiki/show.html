@@ -16,8 +16,8 @@
   {% endif %}
 
   <div class="container">
-    {% cache 86400 wiki wiki.pk version "v2" %}
     <h1>{{ wiki.title }}</h1>
+    {% cache 86400 wiki wiki.pk version "v3" %}
     <div class="row">
       <div class="col-md-8">
         <div class="vcenter">

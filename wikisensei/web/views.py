@@ -115,7 +115,8 @@ class WikiCreate(APIView):
     def get(self, request):
         serializer = WikiSerializer(data={
             'title': '',
-            'content': ''
+            'content': '',
+            'privacy': 'public'
         })
         serializer.is_valid()
         return Response({
@@ -126,6 +127,7 @@ class WikiCreate(APIView):
         data = {
             'title': request.data.get('title'),
             'content': request.data.get('content'),
+            'private': request.data.get('privacy'),
         }
         serializer = WikiSerializer(data=data)
         if not serializer.is_valid():
